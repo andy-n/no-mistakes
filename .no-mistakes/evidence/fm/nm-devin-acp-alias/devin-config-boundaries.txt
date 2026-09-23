@@ -1,0 +1,72 @@
+=== auto selects devin ===
+  System
+  ✓ git             git version 2.50.1 (Apple Git-155)
+  – gh              not found (optional, needed for PR/CI)
+  – az              not found (optional, needed for Azure DevOps PR/CI)
+  ✓ data directory  /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/home
+  – database        not found (will be created on first use)
+  – daemon          stopped
+
+  Agents
+  – claude          not found
+  – codex           not found
+  – grok            not found
+  – rovodev         not found
+  – opencode        not found
+  – pi              not found
+  – copilot         not found
+  – antigravity     not found
+  ✓ acpx            /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/acpx
+  – cursor          not found (cursor-agent)
+  ✓ devin           /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/devin, /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/acpx
+  ✓ gate validation  devin is runnable
+
+=== devin effort refused ===
+  System
+  ✓ git             git version 2.50.1 (Apple Git-155)
+  – gh              not found (optional, needed for PR/CI)
+  – az              not found (optional, needed for Azure DevOps PR/CI)
+  ✓ data directory  /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/home
+  – database        not found (will be created on first use)
+  – daemon          stopped
+
+  Agents
+  – claude          not found
+  – codex           not found
+  – grok            not found
+  – rovodev         not found
+  – opencode        not found
+  – pi              not found
+  – copilot         not found
+  – antigravity     not found
+  ✓ acpx            /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/acpx
+  – cursor          not found (cursor-agent)
+  ✓ devin           /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/devin, /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/acpx
+  ✗ gate validation  unavailable: load config (invalid agent_config.devin: agent "devin" cannot express effort; no-mistakes has no verified effort mechanism for it (bake the flag into acp_registry_overrides.devin if the target's own command accepts one))
+
+  some checks failed
+
+=== explicit acp:devin effort refused ===
+  System
+  ✓ git             git version 2.50.1 (Apple Git-155)
+  – gh              not found (optional, needed for PR/CI)
+  – az              not found (optional, needed for Azure DevOps PR/CI)
+  ✓ data directory  /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/home
+  – database        not found (will be created on first use)
+  – daemon          stopped
+
+  Agents
+  – claude          not found
+  – codex           not found
+  – grok            not found
+  – rovodev         not found
+  – opencode        not found
+  – pi              not found
+  – copilot         not found
+  – antigravity     not found
+  ✓ acpx            /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/acpx
+  – cursor          not found (cursor-agent)
+  ✓ devin           /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/devin, /Users/kunchen/.no-mistakes/worktrees/9cb975a68535/01M366TP99YZTCV55KCR96776Y/.devin-test-41000/bin/acpx
+  ✗ gate validation  unavailable: load config (invalid agent_config.acp:devin: agent "acp:devin" cannot express effort; no-mistakes has no verified effort mechanism for it (bake the flag into acp_registry_overrides.devin if the target's own command accepts one))
+
+  some checks failed
