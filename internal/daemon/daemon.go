@@ -30,6 +30,7 @@ import (
 	"github.com/kunchenguid/no-mistakes/internal/shellenv"
 	"github.com/kunchenguid/no-mistakes/internal/telemetry"
 	"github.com/kunchenguid/no-mistakes/internal/types"
+	"github.com/kunchenguid/no-mistakes/internal/verificationplan"
 	"github.com/kunchenguid/no-mistakes/internal/worktrees"
 )
 
@@ -1279,6 +1280,24 @@ func registerHandlers(srv *ipc.Server, mgr *RunManager, d *db.DB, shutdown func(
 		return &ipc.ProbeOmitIntentResult{OK: true}, nil
 	})
 
+	srv.Handle(ipc.MethodCaptureVerificationPlan, func(ctx context.Context, params json.RawMessage) (interface{}, error) {
+		if err := refuseNested(ctx, false); err != nil {
+			return nil, err
+		}
+		var p ipc.CaptureVerificationPlanParams
+		if err := json.Unmarshal(params, &p); err != nil {
+			return nil, fmt.Errorf("invalid params: %w", err)
+		}
+		repo, err := d.GetRepo(p.RepoID)
+		if err != nil {
+			return nil, err
+		}
+		if repo == nil {
+			return nil, fmt.Errorf("unknown repository")
+		}
+		return verificationplan.Capture(mgr.paths.RunInputsDir(), p.SourcePath, p.RepoID, p.Branch, p.HeadSHA)
+	})
+
 	srv.Handle(ipc.MethodResolvePiProfile, func(ctx context.Context, params json.RawMessage) (interface{}, error) {
 		var request agentcfg.PiProfile
 		if err := json.Unmarshal(params, &request); err != nil {
@@ -1314,7 +1333,7 @@ func registerHandlers(srv *ipc.Server, mgr *RunManager, d *db.DB, shutdown func(
 		if err := json.Unmarshal(params, &p); err != nil {
 			return nil, fmt.Errorf("invalid params: %w", err)
 		}
-		runID, err := mgr.HandleRerun(ctx, p.RepoID, p.Branch, p.PreviousRunID, p.SkipSteps, p.Intent, p.PRBaseBranch, p.OmitIntent, p.CallerHeadSHA, p.PiProfile)
+		runID, err := mgr.HandleRerun(ctx, p.RepoID, p.Branch, p.PreviousRunID, p.SkipSteps, p.Intent, p.PRBaseBranch, p.OmitIntent, p.CallerHeadSHA, p.VerificationPlanID, p.PiProfile)
 		if err != nil {
 			return nil, err
 		}
@@ -1453,6 +1472,7 @@ func runToInfo(d *db.DB, r *db.Run, steps []*db.StepResult) *ipc.RunInfo {
 		PRBaseBranch:       r.PRBaseBranch,
 		OmitIntent:         r.OmitIntent,
 		PiProfile:          r.PiProfile,
+		VerificationPlan:   r.VerificationPlan,
 		AwaitingAgent:      r.AwaitingAgentSince != nil,
 		AwaitingAgentSince: r.AwaitingAgentSince,
 		CreatedAt:          r.CreatedAt,

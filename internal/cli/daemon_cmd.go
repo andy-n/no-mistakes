@@ -131,6 +131,10 @@ func newDaemonNotifyPushCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			verificationPlanID, err := parseVerificationPlanPushOptions(pushOptions)
+			if err != nil {
+				return err
+			}
 			reconciledPreviousHead, err := parseReconciledPreviousHeadPushOptions(pushOptions)
 			if err != nil {
 				return err
@@ -164,6 +168,7 @@ func newDaemonNotifyPushCmd() *cobra.Command {
 				PRBaseBranch:           prBaseBranch,
 				OmitIntent:             omitIntent,
 				PiProfile:              piProfile,
+				VerificationPlanID:     verificationPlanID,
 				ReconciledPreviousHead: reconciledPreviousHead,
 			}, &result)
 		},
