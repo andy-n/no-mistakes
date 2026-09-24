@@ -359,6 +359,11 @@ func runAxiRunWithLaunchProof(cmd *cobra.Command, autoYes bool, skipSteps []type
 				return emitError(cmd, 2, "daemon returned no verification plan capture; refusing to push")
 			}
 			planID = snapshot.ID
+			defer func() {
+				if err := env.client.Call(ipc.MethodReleaseVerificationPlan, &ipc.ReleaseVerificationPlanParams{CaptureID: snapshot.ID, RepoID: env.repo.ID, Branch: branch, HeadSHA: headSHA}, nil); err != nil {
+					fmt.Fprintf(cmd.ErrOrStderr(), "release unowned verification plan capture: %v\n", err)
+				}
+			}()
 		}
 		var err error
 		if launchNonce != "" {

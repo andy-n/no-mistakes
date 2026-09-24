@@ -14,6 +14,7 @@ const (
 	MethodPushReceived            = "push_received"
 	MethodResolvePiProfile        = "resolve_pi_profile"
 	MethodProbeOmitIntent         = "probe_omit_intent"
+	MethodReleaseVerificationPlan = "release_verification_plan"
 	MethodCaptureVerificationPlan = "capture_verification_plan"
 	MethodStartFreshRun           = "start_fresh_run"
 	MethodClaimLaunchReceipt      = "claim_launch_receipt"
@@ -122,6 +123,14 @@ type CaptureVerificationPlanParams struct {
 	RepoID     string `json:"repo_id"`
 	Branch     string `json:"branch"`
 	HeadSHA    string `json:"head_sha"`
+}
+
+// ReleaseVerificationPlanParams identifies an abandoned launch capture.
+type ReleaseVerificationPlanParams struct {
+	CaptureID string `json:"capture_id"`
+	RepoID    string `json:"repo_id"`
+	Branch    string `json:"branch"`
+	HeadSHA   string `json:"head_sha"`
 }
 
 // ProbeOmitIntentParams is the empty request for MethodProbeOmitIntent.

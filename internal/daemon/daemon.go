@@ -1298,6 +1298,29 @@ func registerHandlers(srv *ipc.Server, mgr *RunManager, d *db.DB, shutdown func(
 		return verificationplan.Capture(mgr.paths.RunInputsDir(), p.SourcePath, p.RepoID, p.Branch, p.HeadSHA)
 	})
 
+	srv.Handle(ipc.MethodReleaseVerificationPlan, func(ctx context.Context, params json.RawMessage) (interface{}, error) {
+		var p ipc.ReleaseVerificationPlanParams
+		if err := json.Unmarshal(params, &p); err != nil {
+			return nil, fmt.Errorf("invalid params: %w", err)
+		}
+		// Serialize ownership lookup and deletion with every launch for this branch.
+		_, err := mgr.withBranchLock(p.RepoID, p.Branch, func() (string, error) {
+			run, err := d.GetRun(p.CaptureID)
+			if err != nil || run != nil {
+				return "", err
+			}
+			plan, err := verificationplan.Resolve(mgr.paths.RunInputsDir(), p.CaptureID, p.RepoID, p.Branch, p.HeadSHA)
+			if err != nil {
+				return "", err
+			}
+			if plan == nil {
+				return "", fmt.Errorf("verification plan capture ID is required")
+			}
+			return "", os.RemoveAll(filepath.Dir(plan.Path))
+		})
+		return nil, err
+	})
+
 	srv.Handle(ipc.MethodResolvePiProfile, func(ctx context.Context, params json.RawMessage) (interface{}, error) {
 		var request agentcfg.PiProfile
 		if err := json.Unmarshal(params, &request); err != nil {
