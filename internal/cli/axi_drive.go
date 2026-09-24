@@ -633,6 +633,9 @@ func triggerRun(ctx context.Context, env *axiEnv, branch string, skipSteps []typ
 			priorRunIDs = nil
 		}
 	}
+	if _, err := verificationplan.Resolve(env.p.RunInputsDir(), planID, env.repo.ID, branch, submissionHead); err != nil {
+		return "", err
+	}
 	reconciliation, err := gate.ReconcileStaleBranch(ctx, env.p.RepoDir(env.repo.ID), ".", branch, submissionHead, "")
 	if err != nil {
 		return "", fmt.Errorf("prepare private mirror for %q: %w", branch, err)
@@ -682,6 +685,9 @@ func triggerRun(ctx context.Context, env *axiEnv, branch string, skipSteps []typ
 	params.VerificationPlanID = planID
 	params.CallerHeadSHA, err = rerunCallerHead(ctx)
 	if err != nil {
+		return "", err
+	}
+	if _, err := verificationplan.Resolve(env.p.RunInputsDir(), planID, env.repo.ID, branch, params.CallerHeadSHA); err != nil {
 		return "", err
 	}
 	if err := env.client.Call(ipc.MethodRerun, params, &rr); err != nil {

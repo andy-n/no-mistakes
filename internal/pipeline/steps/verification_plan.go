@@ -33,7 +33,6 @@ END VERIFICATION PLAN EVIDENCE %s
 
 Plan-aware verification guidance:
 - Compare the relevant proposed scenarios, observable failure modes, independent expected results and artifacts with the actual change and product evidence. The plan is not proof that a check ran or passed.
-- When no existing check drives a scenario, perform repeatable product verification and retain its artifact, or name the missing capability and return the scenario untested with that reason.
 - Follow the repository's testing rules before changing any permanent test. An attached plan alone is not a reason to add tests.
 - A missing-test finding must name the observable failure, why existing checks and product evidence do not cover it, and the independent expected result.
 `, plan.Path, plan.SHA256, plan.SourcePath, plan.CapturedAt, plan.SHA256, content, plan.SHA256), nil
