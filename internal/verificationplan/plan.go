@@ -58,9 +58,13 @@ func Capture(root, source, repoID, branch, head string) (_ *Snapshot, err error)
 	if !info.Mode().IsRegular() {
 		return nil, fmt.Errorf("verification plan must be a regular file")
 	}
-	data, err := io.ReadAll(f)
+	const maxBytes = 64 * 1024
+	data, err := io.ReadAll(io.LimitReader(f, maxBytes+1))
 	if err != nil {
 		return nil, fmt.Errorf("read verification plan: %w", err)
+	}
+	if len(data) > maxBytes {
+		return nil, fmt.Errorf("verification plan exceeds maximum size of 64 KiB (65,536 bytes)")
 	}
 	if len(bytes.TrimSpace(data)) == 0 {
 		return nil, fmt.Errorf("verification plan is empty")
